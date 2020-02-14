@@ -13,8 +13,8 @@ module.exports.getCurrentUser = (req, res, next) => {
     User.findById(req.user._id)
       .then((result) => {
         if (result) {
-          const {name, email} = result;
-          res.json({ user:{ name, email}});
+          const { name, email } = result;
+          res.json({ user: { name, email } });
         } else {
           throw new NotFoundError('Пользователь не найден');
         }
