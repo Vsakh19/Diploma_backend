@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const router = require('./routes/index');
+const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
 const { PORT = 3000, MONGO_URL, NODE_ENV} = process.env;
@@ -23,10 +24,6 @@ app.use(requestLogger);
 app.use('/', router);
 app.use(errorLogger);
 app.use(errors());
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-  res.status(statusCode).send({ message });
-  next();
-});
+app.use(errorHandler);
 
 app.listen(PORT);
