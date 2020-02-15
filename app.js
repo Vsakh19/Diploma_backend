@@ -2,47 +2,25 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
-const auth = require('./middlewares/auth');
-const { createUser, login } = require('./controllers/users');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-
+const router = require('./routes/index');
 
 const app = express();
-const { PORT = 3000 } = process.env;
-const userRouter = require('./routes/users');
-const articlesRouter = require('./routes/articles');
+const { PORT = 3000, MONGO_URL, NODE_ENV} = process.env;
 
-mongoose.connect('mongodb://localhost:27017/diplomadb', {
+
+    mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : 'mongodb://localhost:27017/diplomadb', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
   useUnifiedTopology: true,
-})
-  .catch((err) => {
-    console.log(`Ошибка подключения к бд: ${err.toString()}`);
-  });
+});
 
 
 app.use(bodyParser.json());
 app.use(requestLogger);
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().required().min(2).max(30),
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-  }),
-}), createUser);
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-  }),
-}), login);
-app.use(auth);
-app.use('/users', userRouter);
-app.use('/articles', articlesRouter);
+app.use('/', router);
 app.use(errorLogger);
 app.use(errors());
 app.use((err, req, res, next) => {

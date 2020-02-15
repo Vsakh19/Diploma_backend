@@ -24,7 +24,7 @@ module.exports.addArticles = (req, res, next) => {
       keyword, title, text, date, source, link, image, owner: id,
     })
       .then(() => {
-        res.status(201).json({ message: 'Карточка успешно создана' });
+        res.status(201).json({ message: 'Новость успешно добавлена' });
       })
       .catch((err) => {
         throw new InternalServerError(`Произошла ошибка: ${err.toString()}`);
@@ -48,16 +48,16 @@ module.exports.deleteArticles = (req, res, next) => {
             if (card) {
               res.status(204).send();
             } else {
-              throw new NotFoundError('Карточка не найдена');
+              throw new NotFoundError('Новость не найдена');
             }
           })
           .catch(next);
       } else {
-        throw new NotFoundError('Карточка не найдена');
+        throw new NotFoundError('Новость не найдена');
       }
     })
     .catch(() => {
-      throw new NotFoundError('Карточка не найдена');
+      throw new NotFoundError('Новость не найдена');
     })
     .catch(next);
 };

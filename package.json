@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js --mode production",
-    "dev": "nodemon app.js --mode development"
+    "start": "set NODE_ENV=production && node app.js",
+    "dev": "set NODE_ENV=development && nodemon app.js "
   },
   "repository": {
     "type": "git",
