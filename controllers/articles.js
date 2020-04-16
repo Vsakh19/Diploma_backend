@@ -23,8 +23,8 @@ module.exports.addArticles = (req, res, next) => {
     Article.create({
       keyword, title, text, date, source, link, image, owner: id,
     })
-      .then(() => {
-        res.status(201).json({ message: 'Новость успешно добавлена' });
+      .then((cardinfo) => {
+        res.status(201).json({ message: 'Новость успешно добавлена', id: cardinfo._id });
       })
       .catch((err) => {
         throw new InternalServerError(`Произошла ошибка: ${err.toString()}`);
