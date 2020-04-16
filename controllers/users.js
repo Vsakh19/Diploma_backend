@@ -67,7 +67,7 @@ module.exports.login = (req, res, next) => {
             const token = jwt.sign({
               _id: data._id,
             }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
-            res.send({ token });
+            res.send({ data, token });
           } else {
             try {
               throw new UnauthorizedError('Ошибка авторизации');
