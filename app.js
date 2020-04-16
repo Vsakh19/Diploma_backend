@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
+const cors = require('cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const router = require('./routes/index');
 const errorHandler = require('./middlewares/errorHandler');
@@ -18,7 +19,7 @@ mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : 'mongodb://localhost:27
   useUnifiedTopology: true,
 });
 
-
+app.use(cors());
 app.use(bodyParser.json());
 app.use(requestLogger);
 app.use('/', router);
